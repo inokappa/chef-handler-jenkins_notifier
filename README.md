@@ -43,6 +43,7 @@ chef_handler 'Chef::Handler::Jenkins_Notifier' do
   ]
   action :nothing
 end.run_action(:enable)
+```
 
 ## Contributing
 
