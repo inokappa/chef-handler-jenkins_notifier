@@ -5,14 +5,16 @@ require 'digest/md5'
 
 class Chef
   class Handler
+    #noinspection RubyStringKeysInHashInspection
     class Jenkins_Notifier < Chef::Handler
       def initialize(config)
         @config = config
-        raise ArgumentError, 'Jenkins URL is not specified' unless @config[:url]
+        raise ArgumentError, 'Jenkins Host is not specified' unless @config[:host]
+        raise ArgumentError, 'Jenkins Port is not specified' unless @config[:port]
+        raise ArgumentError, 'Jenkins Job Path is not specified' unless @config[:path]
       end
 
       def report
-
         log = []
         if not run_status.success?
           result = 1
@@ -42,9 +44,13 @@ class Chef
         binlog = log.unpack("H*").first
         ms = (run_status.elapsed_time * 1000).round
         data = "<run><log encoding='hexBinary'>#{binlog}</log><result>#{result}</result><duration>#{ms}</duration></run>"
-        http = Net::HTTP.new(@config[:url], @config[:port])
-        response = http.post(@config[:path],data)
-        #puts response
+        req = Net::HTTP::Post.new(@config[:path])
+        if @config[:user] && @config[:pass]
+          req.basic_auth @config[:user], @config[:pass]
+        end
+        req.set_body_internal(data)
+        res = Net::HTTP.new(@config[:host],@config[:port]).start {|http| http.request(req)}
+        #p res
       end
     end
   end
