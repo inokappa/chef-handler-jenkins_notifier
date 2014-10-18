@@ -1,6 +1,7 @@
 # Chef::Handler::JenkinsNotifier
 
-TODO: Write a gem description
+The chef-handler-jenkins_notifier gem is a Chef report mechanism that sends
+failures to a Jenkins Job.
 
 ## Installation
 
@@ -18,7 +19,30 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Create Jenkins Job
+
+Create a Jenkins job.
+
+### Create recipe
+
+Create a new recipe, with the following contents, and add it to the runlist of your base role in Chef:
+
+```ruby
+chef_gem "chef-handler-jenkins_notifier" do
+  action :upgrade
+end
+
+require 'chef/handler/jenkins_notifier'
+
+chef_handler 'Chef::Handler::Jenkins_Notifier' do
+  source 'chef/handler/jenkins_notifier'
+  arguments [
+    :url => "#{JENKINS_HOST}",
+    :port =>  "#{JENKINS_PORT}",
+    :path => "/job/#{JOB_NAME}/postBuildResult"
+  ]
+  action :nothing
+end.run_action(:enable)
 
 ## Contributing
 
