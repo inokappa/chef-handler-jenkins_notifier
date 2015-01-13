@@ -21,7 +21,7 @@ Or install it yourself as:
 
 ### Create Jenkins Job
 
-Create a Jenkins job.
+Create a Jenkins [external job](https://wiki.jenkins-ci.org/display/JENKINS/Monitoring+external+jobs).
 
 ### Create recipe
 
