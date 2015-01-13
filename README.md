@@ -1,7 +1,6 @@
 # Chef::Handler::JenkinsNotifier
 
-The chef-handler-jenkins_notifier gem is a Chef report mechanism that sends
-failures to a Jenkins Job.
+The chef-handler-jenkins_notifier gem is a Chef report mechanism that sends failures to a Jenkins External Job.
 
 ## Installation
 
@@ -21,7 +20,7 @@ Or install it yourself as:
 
 ### Create Jenkins Job
 
-Create a Jenkins job.
+Create a Jenkins [external job](https://wiki.jenkins-ci.org/display/JENKINS/Monitoring+external+jobs).
 
 ### Create recipe
 
