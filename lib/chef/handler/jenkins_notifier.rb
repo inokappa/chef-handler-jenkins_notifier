@@ -50,7 +50,6 @@ class Chef
         end
         req.set_body_internal(data)
         res = Net::HTTP.new(@config[:host],@config[:port]).start {|http| http.request(req)}
-        #p res
       end
     end
   end
