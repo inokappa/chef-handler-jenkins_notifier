@@ -66,6 +66,29 @@ chef_handler 'Chef::Handler::Jenkins_Notifier' do
 end.run_action(:enable)
 ```
 
+Recipe is written as follows: If you use authentication and access with SSL in Jenkins.
+
+```ruby
+chef_gem "chef-handler-jenkins_notifier" do
+  action :upgrade
+end
+
+require 'chef/handler/jenkins_notifier'
+
+chef_handler 'Chef::Handler::Jenkins_Notifier' do
+  source 'chef/handler/jenkins_notifier'
+  arguments [
+    :host => "#{JENKINS_HOST}",
+    :port => "#{JENKINS_PORT}",
+    :path => "/jenkins/job/#{JOB_NAME}/postBuildResult",
+    :user => "#{user}",
+    :pass => "#{pass}",
+    :ssl => true,
+  ]
+  action :nothing
+end.run_action(:enable)
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/chef-handler-jenkins_notifier/fork )

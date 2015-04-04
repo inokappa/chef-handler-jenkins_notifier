@@ -1,6 +1,7 @@
-require "chef/handler/jenkins_notifier/version"
-require "chef/log"
-require "net/http"
+require 'chef/handler/jenkins_notifier/version'
+require 'chef/log'
+require 'net/http'
+require 'net/https'
 require 'digest/md5'
 
 class Chef
@@ -41,15 +42,22 @@ class Chef
       end
 
       def submit_jenkins(run_status, log, result)
+        #
         binlog = log.unpack("H*").first
         ms = (run_status.elapsed_time * 1000).round
         data = "<run><log encoding='hexBinary'>#{binlog}</log><result>#{result}</result><duration>#{ms}</duration></run>"
+        #
+        http = Net::HTTP.new(@config[:host], @config[:port])
+        if @config[:ssl]
+          http.use_ssl = true
+          http.verify_mode = OpenSSL::SSL::VERIFY_NONE 
+        end
         req = Net::HTTP::Post.new(@config[:path])
         if @config[:user] && @config[:pass]
           req.basic_auth @config[:user], @config[:pass]
         end
         req.set_body_internal(data)
-        res = Net::HTTP.new(@config[:host],@config[:port]).start {|http| http.request(req)}
+        res = http.request(req)
       end
     end
   end
